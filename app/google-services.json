@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "585870048437",
+    "project_id": "thegoodway-e3f9c",
+    "storage_bucket": "thegoodway-e3f9c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585870048437:android:3529919585699d851792fc",
+        "android_client_info": {
+          "package_name": "com.soham.thegoodway"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "585870048437-53a4perdj3bapa6e3tn76kn4keoltdim.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIpHHu3dngx6bkP6957jitDS0UeKC2Ojc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "585870048437-0t15fs8nv05vh5r4dsvt4m9p047d3oi0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
