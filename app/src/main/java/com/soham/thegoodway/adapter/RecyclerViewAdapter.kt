@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.soham.thegoodway.DonorSelectLocation
 import com.soham.thegoodway.Drive
+import com.soham.thegoodway.GlobalVariables
 import com.soham.thegoodway.R
 import java.text.SimpleDateFormat
 import java.util.*
@@ -36,6 +37,7 @@ class RecyclerViewAdapter(private var list: ArrayList<Drive>,private var context
         holder.txtTitle.text = data.name
         holder.btnDonate.setOnClickListener {
             val intent = Intent(context,DonorSelectLocation::class.java)
+            GlobalVariables.currentDrive = list[position]
             context.startActivity(intent)
         }
     }

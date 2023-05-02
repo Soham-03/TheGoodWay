@@ -24,16 +24,17 @@ class SelectDonationTypeActivity : AppCompatActivity() {
 
         adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
         binding.spinner.adapter = adapter
-        binding.spinner.setOnItemSelectedListener(object :android.widget.AdapterView.OnItemSelectedListener{
+        binding.spinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 selectedType = paths[p2]
+                GlobalVariables.selectedDonationType = selectedType
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 //
             }
 
-        })
+        }
 
         binding.btnProceed.setOnClickListener {
             val intent = Intent(this@SelectDonationTypeActivity,ScheduleDrivesCalendarActivity::class.java)

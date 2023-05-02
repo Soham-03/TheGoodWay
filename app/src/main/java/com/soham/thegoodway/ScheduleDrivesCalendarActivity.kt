@@ -19,11 +19,21 @@ class ScheduleDrivesCalendarActivity : AppCompatActivity() {
         setContentView(binding.root)
         calendar = Calendar.getInstance()
 
-        binding.calendarView.setOnDateChangeListener { calendarView, i, i2, i3 ->
-            val intent = Intent(this@ScheduleDrivesCalendarActivity,DisplayDrives::class.java)
-            val date = "${i3}/${i2+1}/${i}"
-            intent.putExtra("date",date)
-            startActivity(intent)
+        if(intent.getStringExtra("comingFrom") != "volunteer"){
+            binding.calendarView.setOnDateChangeListener { calendarView, i, i2, i3 ->
+                val intent = Intent(this@ScheduleDrivesCalendarActivity,DisplayDrives::class.java)
+                val date = "${i3}/${i2+1}/${i}"
+                intent.putExtra("date",date)
+                startActivity(intent)
+            }
+        }
+        else{
+            binding.calendarView.setOnDateChangeListener { calendarView, i, i2, i3 ->
+                val intent = Intent(this@ScheduleDrivesCalendarActivity,DisplayDrivesVolunteer::class.java)
+                val date = "${i3}/${i2+1}/${i}"
+                intent.putExtra("date",date)
+                startActivity(intent)
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ package com.soham.thegoodway
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -27,7 +28,7 @@ import java.util.*
 
 class DonorSelectLocation : AppCompatActivity(){
     private lateinit var binding: ActivityDonorSelectLocationBinding
-    private val position = LatLng(19.213613402138165, 73.16237158501396)
+    private lateinit var position: LatLng
     private lateinit var currentLocation: Location
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val REQUEST_CODE = 101
@@ -40,6 +41,11 @@ class DonorSelectLocation : AppCompatActivity(){
             // Initialise the MapView
             onCreate(null)
             // Set the map ready callback to receive the GoogleMap object
+        }
+        binding.btnProceedToLocation.setOnClickListener {
+            GlobalVariables.donorLocation = LatLng(currentLocation.latitude,currentLocation.longitude)
+            val intent = Intent(this@DonorSelectLocation,DriveLocationActivity::class.java)
+            startActivity(intent)
         }
         setContentView(binding.root)
     }
@@ -97,17 +103,16 @@ class DonorSelectLocation : AppCompatActivity(){
         binding.mapview.onLowMemory()
     }
 
-    fun getAddress(lat: Double, lng: Double) {
+    private fun getAddress(lat: Double, lng: Double) {
         val geocoder = Geocoder(this, Locale.getDefault())
         try {
             val addresses: List<Address>? = geocoder.getFromLocation(lat, lng, 1)
             val obj: Address = addresses!![0]
             var add: String = obj.getAddressLine(0)
             Log.v("IGA", "Address$add")
-            Toast.makeText(this, add, Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, add, Toast.LENGTH_SHORT).show()
             binding.txtAddress.text = add.trim()
         } catch (e: IOException) {
-            // TODO Auto-generated catch block
             e.printStackTrace()
             Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
         }

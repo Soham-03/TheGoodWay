@@ -14,6 +14,10 @@ class DonorActivity : AppCompatActivity() {
             val intent = Intent(this@DonorActivity,SelectDonationTypeActivity::class.java)
             startActivity(intent)
         }
+        binding.btnHistory.setOnClickListener {
+            val intent = Intent(this@DonorActivity,DonorHistory::class.java)
+            startActivity(intent)
+        }
         setContentView(binding.root)
     }
 }

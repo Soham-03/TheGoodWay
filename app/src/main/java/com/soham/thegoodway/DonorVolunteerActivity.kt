@@ -15,6 +15,14 @@ class DonorVolunteerActivity : AppCompatActivity() {
             val intent = Intent(this@DonorVolunteerActivity,DonorActivity::class.java)
             startActivity(intent)
         }
+        binding.btnVolunteer.setOnClickListener {
+            val intent = Intent(this@DonorVolunteerActivity,VolunteerActivity::class.java)
+            startActivity(intent)
+        }
+        binding.btnProfile.setOnClickListener {
+            val intent = Intent(this@DonorVolunteerActivity,ProfileActivity::class.java)
+            startActivity(intent)
+        }
         setContentView(binding.root)
     }
 }

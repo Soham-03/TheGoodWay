@@ -9,6 +9,25 @@
     android:background="@color/black"
     android:backgroundTint="@color/black">
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/btnProfile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@color/white">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_name"/>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+
     <ImageView
         android:id="@+id/imgLogo"
         android:layout_width="wrap_content"

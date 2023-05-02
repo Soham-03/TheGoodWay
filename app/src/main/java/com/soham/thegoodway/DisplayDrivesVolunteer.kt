@@ -3,19 +3,20 @@ package com.soham.thegoodway
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.Orientation
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 import com.soham.thegoodway.adapter.RecyclerViewAdapter
+import com.soham.thegoodway.adapter.VolunteerDrivesAdapter
 import com.soham.thegoodway.databinding.ActivityDisplayDrivesBinding
+import com.soham.thegoodway.databinding.ActivityDisplayDrivesVolunteerBinding
 
-class DisplayDrives : AppCompatActivity() {
-    private lateinit var binding: ActivityDisplayDrivesBinding
+class DisplayDrivesVolunteer : AppCompatActivity() {
+    private lateinit var binding:ActivityDisplayDrivesVolunteerBinding
     private lateinit var db: FirebaseFirestore
-    private lateinit var adapter: RecyclerViewAdapter
+    private lateinit var adapter: VolunteerDrivesAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDisplayDrivesBinding.inflate(layoutInflater)
+        binding = ActivityDisplayDrivesVolunteerBinding.inflate(layoutInflater)
         db = FirebaseFirestore.getInstance()
         val date = intent.getStringExtra("date")
         val list = ArrayList<Drive>()
@@ -40,12 +41,12 @@ class DisplayDrives : AppCompatActivity() {
                         }
                     }
                 }
-                adapter = RecyclerViewAdapter(list,this)
-                binding.recyclerViewDrives.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+                adapter = VolunteerDrivesAdapter(list,this)
+                binding.recyclerViewDrives.layoutManager = LinearLayoutManager(this,
+                    LinearLayoutManager.VERTICAL,false)
                 binding.recyclerViewDrives.adapter = adapter
             }
 
         setContentView(binding.root)
     }
-
 }

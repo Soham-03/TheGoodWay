@@ -5,14 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DonorSelectLocation"
+    tools:context=".DonorLocationActivity"
     android:background="@color/black">
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    
+
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:cardCornerRadius="12dp"
         app:cardBackgroundColor="@color/white">
-        
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:text="Your Exact Location"
+                android:text="Pickup Location"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="22sp" />
@@ -55,15 +55,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/line"
-                android:layout_margin="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:text="Address"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="22sp"
-                android:layout_centerHorizontal="true"/>
+                android:textSize="22sp" />
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/btnProceedToLocation"
+                android:id="@+id/btnPickup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtAddress"
@@ -74,11 +77,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Proceed"
+                    android:text="Confirm Pickup"
                     android:textSize="22sp"
                     android:padding="8dp"
                     android:textColor="@color/black"/>
-
             </com.google.android.material.card.MaterialCardView>
 
         </RelativeLayout>

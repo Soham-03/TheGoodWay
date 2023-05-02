@@ -23,12 +23,16 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.soham.thegoodway.databinding.ActivityRegisterLoginBinding
+import java.text.DateFormat
 
 class RegisterLoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterLoginBinding
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
+    private lateinit var heading: String
+    private lateinit var accName: String
+    private lateinit var accPhone: String
     @androidx.core.os.BuildCompat.PrereleaseSdkCheck
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,19 +44,29 @@ class RegisterLoginActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
         auth = Firebase.auth
         db = FirebaseFirestore.getInstance()
-        val heading = intent.getStringExtra("task")
+        heading = intent.getStringExtra("task")!!
         if(heading == "Register"){
             binding.txtSignIn.text = "Create An Account"
             binding.txt.text = heading
         }
         binding.btnSignUpGoogle.setOnClickListener {
-            signIn()
+            if(!TextUtils.isEmpty(binding.edtTxtName.text) && !TextUtils.isEmpty(binding.edtTxtPhoneNumber.text)){
+                accName = binding.edtTxtName.text.toString()
+                accPhone = binding.edtTxtPhoneNumber.text.toString()
+                signIn()
+            }
+            else{
+                Toast.makeText(this@RegisterLoginActivity, "Please Enter name and phone above", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.btnLoginWithEmail.setOnClickListener {
-            if(!TextUtils.isEmpty(binding.edtTxtEmail.text) && !TextUtils.isEmpty(binding.edtTxtPassword.text)){
+            if(!TextUtils.isEmpty(binding.edtTxtEmail.text) && !TextUtils.isEmpty(binding.edtTxtPassword.text)
+                && !TextUtils.isEmpty(binding.edtTxtName.text) && !TextUtils.isEmpty(binding.edtTxtPhoneNumber.text)){
                 if(heading=="Register"){
-                    createUserWithEmailAndPass(binding.edtTxtEmail.text.toString(),binding.edtTxtPassword.text.toString())
+                    createUserWithEmailAndPass(binding.edtTxtEmail.text.toString(),binding.edtTxtPassword.text.toString(),
+                        binding.edtTxtName.text.toString(),binding.edtTxtPhoneNumber.text.toString()
+                    )
                 }
                 else{
                     signInWithEmailAndPass(binding.edtTxtEmail.text.toString(),binding.edtTxtPassword.text.toString())
@@ -102,14 +116,26 @@ class RegisterLoginActivity : AppCompatActivity() {
             }
     }
 
-    private fun createUserWithEmailAndPass(email:String,password: String){
+    private fun createUserWithEmailAndPass(
+        email: String,
+        password: String,
+        name: String,
+        phone: String
+    ){
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
                     val user = auth.currentUser
-                    updateUI(user)
+                    val hashMap =  HashMap<String,String>()
+                    hashMap["name"] = name
+                    hashMap["phone"] = phone
+                    hashMap["dateJoined"] = DateFormat.getDateInstance().format("dd MMMM yyyy")
+                    db.collection("users").document(auth.currentUser!!.uid).set(hashMap)
+                        .addOnSuccessListener {
+                            updateUI(user)
+                        }
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
@@ -120,30 +146,48 @@ class RegisterLoginActivity : AppCompatActivity() {
             }
     }
 
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Log.d(ContentValues.TAG, "signInWithCredential:success")
-                    val user = auth.currentUser
-                    val hashMap =  HashMap<String,String>()
-                    hashMap["name"] = "GGWP"
-                    db.collection(user?.uid!!)
-                        .document("initial")
-                        .set(hashMap)
-                        .addOnSuccessListener {
-                            updateUI(user)
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
-                        }
+    private fun firebaseAuthWithGoogle(idToken: String,heading:String) {
+        if(heading=="Register"){
+            val credential = GoogleAuthProvider.getCredential(idToken, null)
+            auth.signInWithCredential(credential)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        Log.d(ContentValues.TAG, "signInWithCredential:success")
+                        val user = auth.currentUser
+                        val hashMap =  HashMap<String,String>()
+                        hashMap["name"] = accName
+                        hashMap["phone"] = accPhone
+                        hashMap["dateJoined"] = DateFormat.getDateInstance().format("dd MMMM yyyy")
+                        db.collection("users")
+                            .document(user!!.uid)
+                            .set(hashMap)
+                            .addOnSuccessListener {
+                                updateUI(user)
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                            }
 
-                } else {
-                    Log.w(ContentValues.TAG, "signInWithCredential:failure", task.exception)
-                    updateUI(null)
+                    } else {
+                        Log.w(ContentValues.TAG, "signInWithCredential:failure", task.exception)
+                        updateUI(null)
+                    }
                 }
-            }
+        }
+        else{
+            val credential = GoogleAuthProvider.getCredential(idToken, null)
+            auth.signInWithCredential(credential)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        Log.d(ContentValues.TAG, "signInWithCredential:success")
+                        val user = auth.currentUser
+                        updateUI(user)
+                    } else {
+                        Log.w(ContentValues.TAG, "signInWithCredential:failure", task.exception)
+                        updateUI(null)
+                    }
+                }
+        }
     }
 
     private fun signIn() {
@@ -161,7 +205,7 @@ class RegisterLoginActivity : AppCompatActivity() {
             try {
                 val account = task.getResult(ApiException::class.java)!!
                 Log.d(ContentValues.TAG, "firebaseAuthWithGoogle:" + account.id)
-                firebaseAuthWithGoogle(account.idToken!!)
+                firebaseAuthWithGoogle(account.idToken!!, heading = heading)
             } catch (e: ApiException) {
                 Log.w(ContentValues.TAG, "Google sign in failed", e)
             }
